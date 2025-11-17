@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: api_clientes
+    ports:
+      - "8000:8000"
+    restart: always
+
+  client:
+    build: ./client/cliente_manager
+    container_name: cliente_manager_web
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - backend

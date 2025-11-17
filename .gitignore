@@ -1,0 +1,83 @@
+# ============================================
+# Flutter / Dart
+# ============================================
+/build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+.dart_tool/
+
+# Generated files
+generated_plugin_registrant.dart
+
+# iOS
+ios/Flutter/.last_build_id
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+/android/**/local.properties
+/android/**/.gradle/
+/android/**/.idea/
+/android/**/.settings/
+android/build/
+android/app/build/
+
+# Web build output
+build/web/
+
+# ============================================
+# IDEs / Editors
+# ============================================
+.vscode/
+.idea/
+*.iml
+
+# ============================================
+# Operating system
+# ============================================
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Linux
+*.swp
+
+# ============================================
+# Docker
+# ============================================
+**/docker-cache/
+**/docker-temp/
+/tmp/
+/var/tmp/
+*.tmp
+
+# Avoid local env files
+.env
+*.env.local
+*.env.backup
+
+# ============================================
+# Logs
+# ============================================
+*.log
+
+# ============================================
+# Keys / Sensitive
+# ============================================
+*.keystore
+*.jks
+
+# ============================================
+# Other
+# ============================================
+*.tmp
+*.bak
