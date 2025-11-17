@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,7 +7,9 @@ from typing import List, Optional
 from jose import jwt
 from datetime import datetime, timedelta
 
-app = FastAPI(title="Cliente Manager API")
+env = os.getenv("ENVIRONMENT", "development")
+
+app = FastAPI(title=f"Cliente Manager API ({env})")
 
 # Configurar CORS para permitir conexiones desde Flutter
 app.add_middleware(
@@ -17,21 +20,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Configuración JWT
-SECRET_KEY = "clavesin_bombin"
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "clavesin_bombin")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 security = HTTPBearer()
+
 
 # Modelos Pydantic
 class LoginRequest(BaseModel):
     username: str
     password: str
 
+
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class Cliente(BaseModel):
     id: int
@@ -41,6 +48,7 @@ class Cliente(BaseModel):
     empresa: str
     direccion: str
     estado: str  # "activo", "inactivo"
+
 
 # Modelo extendido para registro de clientes
 class RegistroRequest(BaseModel):
@@ -54,17 +62,29 @@ class RegistroRequest(BaseModel):
 
 
 # Datos en memoria (simulando DB)
-usuarios = {
-    "admin": "password123",
-    "usuario": "123456"
-}
+usuarios = {"admin": "password123", "usuario": "123456"}
 
 clientes_data = [
-    Cliente(id=1, nombre="Juan Pérez", email="juan@email.com", telefono="+51987654321", 
-            empresa="Tech Solutions", direccion="Av. Lima 123", estado="activo"),
-    Cliente(id=5, nombre="Roberto Mendoza", email="roberto@email.com", telefono="+51987654325",
-            empresa="Importaciones", direccion="Av. Colonial 202", estado="activo"),
+    Cliente(
+        id=1,
+        nombre="Juan Pérez",
+        email="juan@email.com",
+        telefono="+51987654321",
+        empresa="Tech Solutions",
+        direccion="Av. Lima 123",
+        estado="activo",
+    ),
+    Cliente(
+        id=5,
+        nombre="Roberto Mendoza",
+        email="roberto@email.com",
+        telefono="+51987654325",
+        empresa="Importaciones",
+        direccion="Av. Colonial 202",
+        estado="activo",
+    ),
 ]
+
 
 # Funciones auxiliares
 def create_access_token(data: dict):
@@ -74,9 +94,12 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     try:
-        payload = jwt.decode(credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            credentials.credentials, SECRET_KEY, algorithms=[ALGORITHM]
+        )
         username: str = payload.get("sub")
         if username is None:
             raise HTTPException(status_code=401, detail="Token inválido")
@@ -86,14 +109,17 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
+
 @app.post("/registro")
 async def registro(registro_data: RegistroRequest):
     if registro_data.username in usuarios:
         raise HTTPException(status_code=400, detail="El usuario ya existe")
-    
+
     if len(registro_data.password) < 6:
-        raise HTTPException(status_code=400, detail="La contraseña debe tener al menos 6 caracteres")
-    
+        raise HTTPException(
+            status_code=400, detail="La contraseña debe tener al menos 6 caracteres"
+        )
+
     # Guardar el usuario en la "base de datos"
     usuarios[registro_data.username] = registro_data.password
 
@@ -105,7 +131,7 @@ async def registro(registro_data: RegistroRequest):
         telefono=registro_data.telefono,
         empresa=registro_data.empresa,
         direccion=registro_data.direccion,
-        estado="activo"
+        estado="activo",
     )
     clientes_data.append(nuevo_cliente)
 
@@ -113,22 +139,26 @@ async def registro(registro_data: RegistroRequest):
     return {
         "message": "Usuario registrado exitosamente",
         "access_token": access_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
     }
-
 
 
 @app.post("/login", response_model=Token)
 async def login(login_data: LoginRequest):
-    if login_data.username not in usuarios or usuarios[login_data.username] != login_data.password:
+    if (
+        login_data.username not in usuarios
+        or usuarios[login_data.username] != login_data.password
+    ):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
-    
+
     access_token = create_access_token(data={"sub": login_data.username})
     return {"access_token": access_token, "token_type": "bearer"}
+
 
 @app.get("/clientes", response_model=List[Cliente])
 async def obtener_clientes(username: str = Depends(verify_token)):
     return clientes_data
+
 
 @app.get("/clientes/{cliente_id}", response_model=Cliente)
 async def obtener_cliente(cliente_id: int, username: str = Depends(verify_token)):
@@ -137,10 +167,14 @@ async def obtener_cliente(cliente_id: int, username: str = Depends(verify_token)
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
     return cliente
 
+
 @app.get("/")
 async def root():
     return {"message": "API Cliente Manager funcionando correctamente"}
 
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    port = int(os.getenv("PORT", "8080"))
+    uvicorn.run(app, host="0.0.0.0", port=port)
