@@ -4,70 +4,71 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/models.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'http://10.0.2.2:8080', // Android emulator localhost
+    // defaultValue: 'http://localhost:8080', // Web or iOS simulator localhost
+  );
 
   static const String loginEndpoint = '$baseUrl/login';
   static const String registroEndpoint = '$baseUrl/registro';
   static const String clientesEndpoint = '$baseUrl/clientes';
 
-static Future<Map<String, dynamic>?> registro({
-  required String username,
-  required String password,
-  required String email,
-  required String nombre,
-  required String apellido,
-  required String telefono,
-  required String direccion,
-  required String empresa, 
-}) async {
-  try {
-    final response = await http.post(
-      Uri.parse(registroEndpoint),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'username': username,
-        'password': password,
-        'email': email,
-        'nombre': '$nombre $apellido',
-        'telefono': telefono,
-        'empresa': empresa, 
-        'direccion': direccion,
-      }),
-    );
+  static Future<Map<String, dynamic>?> registro({
+    required String username,
+    required String password,
+    required String email,
+    required String nombre,
+    required String apellido,
+    required String telefono,
+    required String direccion,
+    required String empresa,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse(registroEndpoint),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'password': password,
+          'email': email,
+          'nombre': '$nombre $apellido',
+          'telefono': telefono,
+          'empresa': empresa,
+          'direccion': direccion,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final token = data['access_token'];
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final token = data['access_token'];
 
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
 
-      return {
-        'success': true,
-        'token': token,
-        'message': data['message'] ?? 'Registro exitoso',
-        'username': username,
-      };
-    } else if (response.statusCode == 400) {
-      final data = jsonDecode(response.body);
-      return {
-        'success': false,
-        'message': data['detail'] ?? 'Error en el registro',
-      };
-    } else {
-      return {
-        'success': false,
-        'message': 'Error al registrar usuario (${response.statusCode})',
-      };
+        return {
+          'success': true,
+          'token': token,
+          'message': data['message'] ?? 'Registro exitoso',
+          'username': username,
+        };
+      } else if (response.statusCode == 400) {
+        final data = jsonDecode(response.body);
+        return {
+          'success': false,
+          'message': data['detail'] ?? 'Error en el registro',
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Error al registrar usuario (${response.statusCode})',
+        };
+      }
+    } catch (e) {
+      print('Error en registro: $e');
+      return {'success': false, 'message': 'Error de conexión: $e'};
     }
-  } catch (e) {
-    print('Error en registro: $e');
-    return {
-      'success': false,
-      'message': 'Error de conexión: $e',
-    };
   }
-}
 
   // Login
   static Future<String?> login(String username, String password) async {
@@ -75,10 +76,7 @@ static Future<Map<String, dynamic>?> registro({
       final response = await http.post(
         Uri.parse(loginEndpoint),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'username': username,
-          'password': password,
-        }),
+        body: jsonEncode({'username': username, 'password': password}),
       );
 
       if (response.statusCode == 200) {
