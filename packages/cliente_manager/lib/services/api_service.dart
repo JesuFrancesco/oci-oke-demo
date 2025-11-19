@@ -4,14 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/models.dart';
 
 class ApiService {
-  static const String baseUrl = String.fromEnvironment(
-    'API_URL',
-    defaultValue: 'http://10.0.2.2:8080', // Android emulator localhost
-    // defaultValue: 'http://localhost:8080', // Web or iOS simulator localhost
-  );
+  static const String baseUrl = String.fromEnvironment('API_URL');
 
-  static const String loginEndpoint = '$baseUrl/login';
-  static const String registroEndpoint = '$baseUrl/registro';
+  static const String loginEndpoint = '$baseUrl/auth/login';
+  static const String registroEndpoint = '$baseUrl/auth/registro';
   static const String clientesEndpoint = '$baseUrl/clientes';
 
   static Future<Map<String, dynamic>?> registro({
@@ -89,6 +85,7 @@ class ApiService {
 
         return token;
       } else {
+        print('Error en login: ${response.statusCode} ${response.body}');
         return null;
       }
     } catch (e) {
