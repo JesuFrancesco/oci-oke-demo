@@ -28,10 +28,11 @@ jobs:
         run: flutter pub get
 
       - name: Build APK (Debug)
-        run: flutter build apk --debug --dart-define=API_URL=${{ github.event.inputs['backend-ip-address'] }}
+        run: flutter build apk --debug --dart-define=API_URL=${{ github.event.inputs['backend-ip-address'] }} --split-per-abi
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: packages/cliente_manager/build/app/outputs/flutter-apk/app-debug.apk
+          path: |
+            packages/cliente_manager/build/app/outputs/flutter-apk/**
