@@ -1,4 +1,5 @@
 compartment_id = ""
+number_of_nodes = ""
 
 tenancy_ocid = ""
 user_ocid = ""

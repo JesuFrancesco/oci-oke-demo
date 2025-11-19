@@ -27,6 +27,12 @@ variable "serviceLbSubnetCidr" {
   default     = "10.0.20.0/24"
 }
 
+variable "number_of_nodes" {
+  description = "The number of worker nodes in the OKE cluster."
+  type        = number
+  default     = 3
+}
+
 variable "tenancy_ocid" {}
 variable "user_ocid" {}
 variable "fingerprint" {}

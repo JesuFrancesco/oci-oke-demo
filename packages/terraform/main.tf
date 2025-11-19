@@ -289,7 +289,7 @@ resource "oci_containerengine_node_pool" "oke_node_pool" {
   # ssh_public_key = file(var.ssh_public_key_path)
 
   node_config_details {
-    size = 3 # required by API, but overridden by quantity_per_subnet
+    size = var.number_of_nodes
 
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.test_availability_domains.availability_domains[0].name
