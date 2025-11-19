@@ -1,0 +1,37 @@
+name: Flutter CI (Android)
+
+on:
+  workflow_dispatch:
+    inputs:
+      backend-ip-address:
+        description: "Backend IP Address"
+        required: true
+        default: "10.0.2.2:8080"
+
+defaults:
+  run:
+    working-directory: packages/cliente_manager
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "stable"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK (Debug)
+        run: flutter build apk --debug --dart-define=API_URL=${{ github.event.inputs['backend-ip-address'] }}
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: packages/cliente_manager/build/app/outputs/flutter-apk/app-debug.apk
