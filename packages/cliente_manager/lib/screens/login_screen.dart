@@ -4,7 +4,7 @@ import 'clientes_list_screen.dart';
 import 'registro_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -91,16 +91,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Cliente Manager',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade800,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade800,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Inicia sesión para continuar',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Colors.grey.shade600,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.grey.shade600),
                 ),
                 const SizedBox(height: 32),
 
@@ -139,7 +139,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       },
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        _obscurePassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                     ),
                     border: OutlineInputBorder(
@@ -176,12 +178,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
                             ),
                           )
                         : const Text(
                             'Iniciar Sesión',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                   ),
                 ),

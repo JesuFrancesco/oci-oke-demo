@@ -5,7 +5,7 @@ import 'cliente_detail_screen.dart';
 import 'login_screen.dart';
 
 class ClientesListScreen extends StatefulWidget {
-  const ClientesListScreen({Key? key}) : super(key: key);
+  const ClientesListScreen({super.key});
 
   @override
   State<ClientesListScreen> createState() => _ClientesListScreenState();
@@ -36,7 +36,7 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
     });
 
     final clientes = await ApiService.getClientes();
-    
+
     if (clientes != null) {
       setState(() {
         _clientes = clientes;
@@ -60,10 +60,12 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
         _clientesFiltrados = _clientes;
       } else {
         _clientesFiltrados = _clientes
-            .where((cliente) =>
-                cliente.nombre.toLowerCase().contains(query.toLowerCase()) ||
-                cliente.empresa.toLowerCase().contains(query.toLowerCase()) ||
-                cliente.email.toLowerCase().contains(query.toLowerCase()))
+            .where(
+              (cliente) =>
+                  cliente.nombre.toLowerCase().contains(query.toLowerCase()) ||
+                  cliente.empresa.toLowerCase().contains(query.toLowerCase()) ||
+                  cliente.email.toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
       }
     });
@@ -86,7 +88,9 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
         leading: CircleAvatar(
-          backgroundColor: cliente.estado == 'activo' ? Colors.green : Colors.orange,
+          backgroundColor: cliente.estado == 'activo'
+              ? Colors.green
+              : Colors.orange,
           child: Text(
             cliente.nombre.substring(0, 1).toUpperCase(),
             style: const TextStyle(
@@ -97,10 +101,7 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
         ),
         title: Text(
           cliente.nombre,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,18 +109,12 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
             const SizedBox(height: 4),
             Text(
               cliente.empresa,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
             ),
             const SizedBox(height: 2),
             Text(
               cliente.email,
-              style: TextStyle(
-                color: Colors.grey.shade500,
-                fontSize: 12,
-              ),
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
             ),
           ],
         ),
@@ -135,13 +130,17 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: cliente.estado == 'activo' ? Colors.green.shade100 : Colors.orange.shade100,
+                color: cliente.estado == 'activo'
+                    ? Colors.green.shade100
+                    : Colors.orange.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
                 cliente.estado.toUpperCase(),
                 style: TextStyle(
-                  color: cliente.estado == 'activo' ? Colors.green.shade800 : Colors.orange.shade800,
+                  color: cliente.estado == 'activo'
+                      ? Colors.green.shade800
+                      : Colors.orange.shade800,
                   fontSize: 10,
                   fontWeight: FontWeight.bold,
                 ),
@@ -211,45 +210,43 @@ class _ClientesListScreenState extends State<ClientesListScreen> {
               ),
             ),
           ),
-          
+
           // Lista de clientes
           Expanded(
             child: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                ? const Center(child: CircularProgressIndicator())
                 : _clientesFiltrados.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.search_off,
-                              size: 64,
-                              color: Colors.grey.shade400,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              _searchQuery.isEmpty
-                                  ? 'No hay clientes'
-                                  : 'No se encontraron clientes',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ],
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search_off,
+                          size: 64,
+                          color: Colors.grey.shade400,
                         ),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: _loadClientes,
-                        child: ListView.builder(
-                          itemCount: _clientesFiltrados.length,
-                          itemBuilder: (context, index) {
-                            return _buildClienteCard(_clientesFiltrados[index]);
-                          },
+                        const SizedBox(height: 16),
+                        Text(
+                          _searchQuery.isEmpty
+                              ? 'No hay clientes'
+                              : 'No se encontraron clientes',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                      ),
+                      ],
+                    ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: _loadClientes,
+                    child: ListView.builder(
+                      itemCount: _clientesFiltrados.length,
+                      itemBuilder: (context, index) {
+                        return _buildClienteCard(_clientesFiltrados[index]);
+                      },
+                    ),
+                  ),
           ),
         ],
       ),

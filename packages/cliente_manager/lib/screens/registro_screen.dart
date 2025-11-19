@@ -3,7 +3,7 @@ import '../services/api_service.dart';
 import 'clientes_list_screen.dart';
 
 class RegistroScreen extends StatefulWidget {
-  const RegistroScreen({Key? key}) : super(key: key);
+  const RegistroScreen({super.key});
 
   @override
   State<RegistroScreen> createState() => _RegistroScreenState();
@@ -57,7 +57,9 @@ class _RegistroScreenState extends State<RegistroScreen> {
     setState(() => _isLoading = true);
 
     // Concatenamos nombre + apellido para enviar solo el campo "nombre" al backend
-    final nombreCompleto = '${_nombreController.text.trim()} ${_apellidoController.text.trim()}'.trim();
+    final nombreCompleto =
+        '${_nombreController.text.trim()} ${_apellidoController.text.trim()}'
+            .trim();
 
     final result = await ApiService.registro(
       username: _usernameController.text.trim(),
@@ -129,67 +131,91 @@ class _RegistroScreenState extends State<RegistroScreen> {
                     color: Colors.blue,
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  child: const Icon(Icons.person_add, size: 50, color: Colors.white),
+                  child: const Icon(
+                    Icons.person_add,
+                    size: 50,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 24),
 
                 Text(
                   'Crear Cuenta',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue.shade800,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade800,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                Text('Completa los datos para registrarte', style: TextStyle(color: Colors.grey.shade600)),
+                Text(
+                  'Completa los datos para registrarte',
+                  style: TextStyle(color: Colors.grey.shade600),
+                ),
                 const SizedBox(height: 24),
 
                 // Nombre
                 TextFormField(
                   controller: _nombreController,
                   decoration: _inputDecoration('Nombre', Icons.badge_outlined),
-                  validator: (v) => v == null || v.isEmpty ? 'Ingresa tu nombre' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Ingresa tu nombre' : null,
                 ),
                 const SizedBox(height: 16),
 
                 // Apellido
                 TextFormField(
                   controller: _apellidoController,
-                  decoration: _inputDecoration('Apellido', Icons.person_outline),
-                  validator: (v) => v == null || v.isEmpty ? 'Ingresa tu apellido' : null,
+                  decoration: _inputDecoration(
+                    'Apellido',
+                    Icons.person_outline,
+                  ),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Ingresa tu apellido' : null,
                 ),
                 const SizedBox(height: 16),
 
                 // Empresa
                 TextFormField(
                   controller: _empresaController,
-                  decoration: _inputDecoration('Empresa', Icons.business_outlined),
-                  validator: (v) => v == null || v.isEmpty ? 'Ingresa el nombre de tu empresa' : null,
+                  decoration: _inputDecoration(
+                    'Empresa',
+                    Icons.business_outlined,
+                  ),
+                  validator: (v) => v == null || v.isEmpty
+                      ? 'Ingresa el nombre de tu empresa'
+                      : null,
                 ),
                 const SizedBox(height: 16),
-
 
                 // Teléfono
                 TextFormField(
                   controller: _telefonoController,
                   keyboardType: TextInputType.phone,
                   decoration: _inputDecoration('Teléfono', Icons.phone),
-                  validator: (v) => v == null || v.isEmpty ? 'Ingresa tu teléfono' : null,
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Ingresa tu teléfono' : null,
                 ),
                 const SizedBox(height: 16),
 
                 // Dirección
                 TextFormField(
                   controller: _direccionController,
-                  decoration: _inputDecoration('Dirección', Icons.home_outlined),
-                  validator: (v) => v == null || v.isEmpty ? 'Ingresa tu dirección' : null,
+                  decoration: _inputDecoration(
+                    'Dirección',
+                    Icons.home_outlined,
+                  ),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Ingresa tu dirección' : null,
                 ),
                 const SizedBox(height: 16),
 
                 // Usuario
                 TextFormField(
                   controller: _usernameController,
-                  decoration: _inputDecoration('Usuario', Icons.account_circle_outlined),
+                  decoration: _inputDecoration(
+                    'Usuario',
+                    Icons.account_circle_outlined,
+                  ),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'Ingresa un usuario';
                     if (v.length < 3) return 'Debe tener al menos 3 caracteres';
@@ -215,12 +241,19 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
-                  decoration: _inputDecoration('Contraseña', Icons.lock_outline).copyWith(
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
+                  decoration: _inputDecoration('Contraseña', Icons.lock_outline)
+                      .copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword,
+                          ),
+                        ),
+                      ),
                   validator: (v) {
                     if (v == null || v.isEmpty) return 'Ingresa una contraseña';
                     if (v.length < 6) return 'Debe tener al menos 6 caracteres';
@@ -233,13 +266,25 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirmPassword,
-                  decoration: _inputDecoration('Confirmar Contraseña', Icons.lock_outline).copyWith(
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
-                    ),
-                  ),
-                  validator: (v) => v == null || v.isEmpty ? 'Confirma tu contraseña' : null,
+                  decoration:
+                      _inputDecoration(
+                        'Confirmar Contraseña',
+                        Icons.lock_outline,
+                      ).copyWith(
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () => setState(
+                            () => _obscureConfirmPassword =
+                                !_obscureConfirmPassword,
+                          ),
+                        ),
+                      ),
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Confirma tu contraseña' : null,
                 ),
                 const SizedBox(height: 24),
 
@@ -252,11 +297,26 @@ class _RegistroScreenState extends State<RegistroScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     child: _isLoading
-                        ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : const Text('Registrarse', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text(
+                            'Registrarse',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -265,10 +325,19 @@ class _RegistroScreenState extends State<RegistroScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('¿Ya tienes cuenta? ', style: TextStyle(color: Colors.grey.shade600)),
+                    Text(
+                      '¿Ya tienes cuenta? ',
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: Text('Inicia sesión', style: TextStyle(color: Colors.blue.shade800, fontWeight: FontWeight.bold)),
+                      child: Text(
+                        'Inicia sesión',
+                        style: TextStyle(
+                          color: Colors.blue.shade800,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
                 ),

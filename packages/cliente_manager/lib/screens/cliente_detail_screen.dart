@@ -7,7 +7,7 @@ import 'login_screen.dart';
 class ClienteDetailScreen extends StatefulWidget {
   final int clienteId;
 
-  const ClienteDetailScreen({Key? key, required this.clienteId}) : super(key: key);
+  const ClienteDetailScreen({super.key, required this.clienteId});
 
   @override
   State<ClienteDetailScreen> createState() => _ClienteDetailScreenState();
@@ -55,7 +55,12 @@ class _ClienteDetailScreenState extends State<ClienteDetailScreen> {
     );
   }
 
-  Widget _buildInfoCard(String title, String value, IconData icon, {VoidCallback? onTap}) {
+  Widget _buildInfoCard(
+    String title,
+    String value,
+    IconData icon, {
+    VoidCallback? onTap,
+  }) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
@@ -106,10 +111,14 @@ class _ClienteDetailScreenState extends State<ClienteDetailScreen> {
         child: Row(
           children: [
             CircleAvatar(
-              backgroundColor: isActivo ? Colors.green.shade100 : Colors.orange.shade100,
+              backgroundColor: isActivo
+                  ? Colors.green.shade100
+                  : Colors.orange.shade100,
               child: Icon(
                 isActivo ? Icons.check_circle : Icons.pause_circle,
-                color: isActivo ? Colors.green.shade800 : Colors.orange.shade800,
+                color: isActivo
+                    ? Colors.green.shade800
+                    : Colors.orange.shade800,
               ),
             ),
             const SizedBox(width: 16),
@@ -127,15 +136,22 @@ class _ClienteDetailScreenState extends State<ClienteDetailScreen> {
                   ),
                   const SizedBox(height: 4),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
-                      color: isActivo ? Colors.green.shade100 : Colors.orange.shade100,
+                      color: isActivo
+                          ? Colors.green.shade100
+                          : Colors.orange.shade100,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
                       _cliente!.estado.toUpperCase(),
                       style: TextStyle(
-                        color: isActivo ? Colors.green.shade800 : Colors.orange.shade800,
+                        color: isActivo
+                            ? Colors.green.shade800
+                            : Colors.orange.shade800,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -168,86 +184,84 @@ class _ClienteDetailScreenState extends State<ClienteDetailScreen> {
         ],
       ),
       body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
+          ? const Center(child: CircularProgressIndicator())
           : _cliente == null
-              ? const Center(
-                  child: Text('Cliente no encontrado'),
-                )
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
+          ? const Center(child: Text('Cliente no encontrado'))
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 16),
 
-                      // Avatar y nombre principal
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                _cliente!.nombre.substring(0, 1).toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
+                  // Avatar y nombre principal
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.blue,
+                          child: Text(
+                            _cliente!.nombre.substring(0, 1).toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            const SizedBox(height: 16),
-                            Text(
-                              _cliente!.nombre,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              _cliente!.empresa,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-
-                      // Estado del cliente
-                      _buildStatusCard(),
-
-                      // Información adicional
-                      _buildInfoCard(
-                        'Correo',
-                        _cliente!.email,
-                        Icons.email,
-                        onTap: () => _copyToClipboard(_cliente!.email, 'Correo'),
-                      ),
-                      _buildInfoCard(
-                        'Teléfono',
-                        _cliente!.telefono,
-                        Icons.phone,
-                        onTap: () => _copyToClipboard(_cliente!.telefono, 'Teléfono'),
-                      ),
-                      _buildInfoCard(
-                        'Dirección',
-                        _cliente!.direccion,
-                        Icons.location_on,
-                        onTap: () => _copyToClipboard(_cliente!.direccion, 'Dirección'),
-                      ),
-
-                      const SizedBox(height: 24),
-                    ],
+                        const SizedBox(height: 16),
+                        Text(
+                          _cliente!.nombre,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _cliente!.empresa,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+
+                  // Estado del cliente
+                  _buildStatusCard(),
+
+                  // Información adicional
+                  _buildInfoCard(
+                    'Correo',
+                    _cliente!.email,
+                    Icons.email,
+                    onTap: () => _copyToClipboard(_cliente!.email, 'Correo'),
+                  ),
+                  _buildInfoCard(
+                    'Teléfono',
+                    _cliente!.telefono,
+                    Icons.phone,
+                    onTap: () =>
+                        _copyToClipboard(_cliente!.telefono, 'Teléfono'),
+                  ),
+                  _buildInfoCard(
+                    'Dirección',
+                    _cliente!.direccion,
+                    Icons.location_on,
+                    onTap: () =>
+                        _copyToClipboard(_cliente!.direccion, 'Dirección'),
+                  ),
+
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
     );
   }
 }
