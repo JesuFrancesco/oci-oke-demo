@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: promo-proy-config
+  namespace: default
+data:
+  PORT: "8080"
+  ENVIRONMENT: "production"
+  JWT_SECRET_KEY: "example_secret_key"

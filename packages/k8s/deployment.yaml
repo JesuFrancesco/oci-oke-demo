@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: promo-proy
+  name: promo-proy-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: promo-proy
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: promo-proy
+    spec:
+      containers:
+      - image: ord.ocir.io/ax9qvevbkick/oci-oke-demo:latest
+        name: oci-oke-demo
+        resources: {}
+        ports:
+        - containerPort: 8080  # Must match PORT env var
+        envFrom:
+        - configMapRef:
+            name: promo-proy-config
+status: {}
