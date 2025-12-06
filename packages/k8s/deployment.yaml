@@ -18,7 +18,8 @@ spec:
         app: promo-proy
     spec:
       containers:
-      - image: ord.ocir.io/ax9qvevbkick/oci-oke-demo:latest
+      # - image: ord.ocir.io/ax9qvevbkick/oci-oke-demo:latest 
+      - image: iad.ocir.io/idzsq62pkv0d/oci-oke-demo:latest
         name: oci-oke-demo
         resources: {}
         ports:
